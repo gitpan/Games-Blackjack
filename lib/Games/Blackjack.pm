@@ -5,7 +5,7 @@ use warnings; use strict;
 
 package Games::Blackjack;
 
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 
 #==========================================
 package Games::Blackjack::Shoe;
@@ -94,8 +94,8 @@ sub count {
         if($_->[1] =~ /\d/) {
             $counts += $_->[1];
         } elsif($_->[1] eq 'A') {
-            $counts = any($counts+1, 
-                          $counts+11);
+            $counts = any(
+                map { eigenstates $_ } $counts+1, $counts+11);
         } else {
             $counts += 10;
         }

@@ -1,5 +1,18 @@
 Revision history for Games::Blackjack
 
+0.04  01/25/2004
+      * Fixed what was suspected to be a bug in Quantum::Superpositions, 
+        but was indeed a bug in Games::Blackjack, as Damian Conway pointed 
+        out: To access eigenstates in nested superpositions, they need to 
+        be flattened out. So if
+            $count = any(any(2,12),any(12,22))
+        then $count <= 21 will return both nested superpositions, 
+        any(2,12) and any(12,22), resulting in any(2,12,22) for the 
+        superposition's eigenstates. Instead,
+            $count = any(map {eigenstates $_} any(2,12), any(12,22))
+        will flatten out the eigenstates and have $count <= 21 return
+        any(2,12), as expected.
+
 0.03  12/07/2003
       * Updated docs for CPAN release
 
@@ -15,35 +28,4 @@ Revision history for Games::Blackjack
         (http://www.linux-magazine.com/issue/38).
 
 TODO:
-      * There's currently a bug in Quantum::Superpositions 2.02, which is 
-        used by Games::Blackjack internally. It's being investigated by
-        Q::S maintainer Steven Lembark <lembark@wrkhors.com>, I'll keep 
-        you up to date.
       * Add doubling/splitting of hands
-
-> Hey Steven,
->
-> think there's a bug in Q:S. This snippet works OK:
->
->      my $count = any(2,12,22);
->      $count = ($count <= 21);
->      # => any(2,12);
->
-> But in the following case, it's not doing the right thing:
->
->      my $count = any(1, 11);
->      $count    = any($count+1, $count+11);
->      $count = ($count <= 21);
->      # => any(2,22,12)
->
-> Seems like the logical compare "$count <= 21" doesn't really return a
-> superposition with the eigenvalues <= 21.
->
-
-I know about it, working on a patch. Basic problem is that
-the iterator logic needs to bless the returned items and
-it isn't. Issue is to make sure that they are blessed at
-the proper level and handled correctly by Multimethods.
-
-For the moment you can try applying the attached, warn me
-if it works properly.

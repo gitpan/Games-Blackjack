@@ -39,7 +39,7 @@ ok(!defined $dealer->count("hard"));
 
 SKIP:
 {
-    skip "Skipping until Q::S 2.02 bug is fixed (see Changes)", 1;
+    #skip "Skipping until Q::S 2.02 bug is fixed (see Changes)", 1;
 
 ######################################################################
 # Q::S 2.02 bug
