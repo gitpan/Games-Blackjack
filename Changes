@@ -1,0 +1,49 @@
+Revision history for Games::Blackjack
+
+0.03  12/07/2003
+      * Updated docs for CPAN release
+
+0.02  12/01/2003
+      * Fixed bug with shuffle(), see
+        http://www.perlmeister.com/errata/2003-12-Snapshot/
+
+0.01  11/01/2003
+      * First public release in an issue of the monthly "Perl Snapshot",
+        a column in the Germany-based "Linux-Magazin" 
+        (http://www.linux-magazin.de/Artikel/ausgabe/2003/12/perl/perl.html)
+        and the UK-based "Linux-Magazine" 
+        (http://www.linux-magazine.com/issue/38).
+
+TODO:
+      * There's currently a bug in Quantum::Superpositions 2.02, which is 
+        used by Games::Blackjack internally. It's being investigated by
+        Q::S maintainer Steven Lembark <lembark@wrkhors.com>, I'll keep 
+        you up to date.
+      * Add doubling/splitting of hands
+
+> Hey Steven,
+>
+> think there's a bug in Q:S. This snippet works OK:
+>
+>      my $count = any(2,12,22);
+>      $count = ($count <= 21);
+>      # => any(2,12);
+>
+> But in the following case, it's not doing the right thing:
+>
+>      my $count = any(1, 11);
+>      $count    = any($count+1, $count+11);
+>      $count = ($count <= 21);
+>      # => any(2,22,12)
+>
+> Seems like the logical compare "$count <= 21" doesn't really return a
+> superposition with the eigenvalues <= 21.
+>
+
+I know about it, working on a patch. Basic problem is that
+the iterator logic needs to bless the returned items and
+it isn't. Issue is to make sure that they are blessed at
+the proper level and handled correctly by Multimethods.
+
+For the moment you can try applying the attached, warn me
+if it works properly.

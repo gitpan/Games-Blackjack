@@ -1,0 +1,9 @@
+Changes
+MANIFEST			This list of files
+MANIFEST.SKIP
+Makefile.PL
+README
+adm/podok
+eg/blackjack
+lib/Games/Blackjack.pm
+t/001Basic.t
